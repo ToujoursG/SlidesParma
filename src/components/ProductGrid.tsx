@@ -2,11 +2,10 @@ import { ProductCard, Product } from './ProductCard';
 
 interface ProductGridProps {
   products: Product[];
-  onAddToCart: (product: Product) => void;
   isLoading?: boolean;
 }
 
-export const ProductGrid = ({ products, onAddToCart, isLoading }: ProductGridProps) => {
+export const ProductGrid = ({ products, isLoading }: ProductGridProps) => {
   if (isLoading) {
     return (
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
@@ -34,12 +33,11 @@ export const ProductGrid = ({ products, onAddToCart, isLoading }: ProductGridPro
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 sm:gap-6">
       {products.map((product) => (
         <ProductCard
           key={product.id}
           product={product}
-          onAddToCart={onAddToCart}
         />
       ))}
     </div>

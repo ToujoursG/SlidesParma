@@ -4,20 +4,30 @@ import { Sidebar } from '@/components/Sidebar';
 import { ProductGrid } from '@/components/ProductGrid';
 import { Product } from '@/components/ProductCard';
 import { mockProducts, mockCategories } from '@/data/mockData';
-import { useToast } from '@/hooks/use-toast';
 
 const Index = () => {
   const [products] = useState<Product[]>(mockProducts);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
-  const [cartItems, setCartItems] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
-  const { toast } = useToast();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   // Simulate loading
   useEffect(() => {
     const timer = setTimeout(() => setIsLoading(false), 1000);
     return () => clearTimeout(timer);
+  }, []);
+
+  // Close mobile menu when screen size changes
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 1024) {
+        setIsMobileMenuOpen(false);
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   // Filter products based on category and search
@@ -39,29 +49,32 @@ const Index = () => {
     return filtered;
   }, [products, selectedCategory, searchQuery]);
 
-  const handleAddToCart = (product: Product) => {
-    setCartItems(prev => prev + 1);
-    toast({
-      title: "Produto adicionado!",
-      description: `${product.name} foi adicionado ao carrinho`,
-    });
+  const handleMenuToggle = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
+  const handleSidebarClose = () => {
+    setIsMobileMenuOpen(false);
   };
 
   return (
     <div className="min-h-screen bg-background">
       <Header 
         onSearchChange={setSearchQuery}
-        cartItems={cartItems}
+        onMenuToggle={handleMenuToggle}
+        isMobileMenuOpen={isMobileMenuOpen}
       />
       
-      <div className="flex min-h-[calc(100vh-4rem)]">
+      <div className="flex min-h-[calc(100vh-4rem)] relative">
         <Sidebar
           categories={mockCategories}
           selectedCategory={selectedCategory}
           onCategorySelect={setSelectedCategory}
+          isOpen={isMobileMenuOpen}
+          onClose={handleSidebarClose}
         />
         
-        <main className="flex-1 p-6 overflow-auto">
+        <main className="flex-1 p-4 sm:p-6 lg:ml-0 overflow-auto">
           <div className="mb-6">
             <h2 className="text-2xl font-bold text-foreground mb-2">
               {selectedCategory 
@@ -76,7 +89,6 @@ const Index = () => {
 
           <ProductGrid
             products={filteredProducts}
-            onAddToCart={handleAddToCart}
             isLoading={isLoading}
           />
         </main>

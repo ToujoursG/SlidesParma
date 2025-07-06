@@ -47,12 +47,14 @@
     --sidebar-border: 0 0% 18%;
     --sidebar-ring: 141 76% 48%;
 
-    /* Gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(var(--spotify-green)), hsl(var(--spotify-purple)));
-    --gradient-card: linear-gradient(145deg, hsl(var(--spotify-card)), hsl(var(--spotify-hover)));
-    
-    /* Animations */
-    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  /* Animations and transitions */
+  --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-bounce: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  
+  /* Shadows */
+  --shadow-glow: 0 0 20px hsl(var(--primary) / 0.3);
+  --shadow-card: 0 4px 12px hsl(0 0% 0% / 0.15);
+}
   }
 
   .dark {
