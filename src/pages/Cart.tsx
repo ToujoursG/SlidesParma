@@ -1,13 +1,16 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, Minus, Plus, Trash2 } from 'lucide-react';
+import { ArrowLeft, Trash2, Tag } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
 import { useCart } from '@/context/CartContext';
 import { useToast } from '@/hooks/use-toast';
 
 export const Cart = () => {
-  const { state, removeItem, updateQuantity, clearCart } = useCart();
+  const { state, removeItem, clearCart, applyCoupon, removeCoupon } = useCart();
   const { toast } = useToast();
+  const [couponInput, setCouponInput] = useState('');
 
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('pt-BR', {
@@ -16,18 +19,39 @@ export const Cart = () => {
     }).format(price);
   };
 
-  const handleQuantityChange = (itemId: string, newQuantity: number) => {
-    if (newQuantity === 0) {
-      removeItem(itemId);
-    } else {
-      updateQuantity(itemId, newQuantity);
+  const finalTotal = state.total - (state.total * state.discount / 100);
+
+  const handleApplyCoupon = () => {
+    if (couponInput.trim()) {
+      const success = applyCoupon(couponInput.trim());
+      if (success) {
+        toast({
+          title: "Cupom aplicado!",
+          description: `Desconto de ${state.discount}% aplicado com sucesso.`,
+        });
+        setCouponInput('');
+      } else {
+        toast({
+          title: "Cupom inválido",
+          description: "O cupom inserido não é válido.",
+          variant: "destructive",
+        });
+      }
     }
+  };
+
+  const handleRemoveCoupon = () => {
+    removeCoupon();
+    toast({
+      title: "Cupom removido",
+      description: "O desconto foi removido do seu pedido.",
+    });
   };
 
   const handleCheckout = () => {
     toast({
       title: "Compra finalizada!",
-      description: `Total: ${formatPrice(state.total)}. Obrigado pela compra!`,
+      description: `Total: ${formatPrice(finalTotal)}. Obrigado pela compra!`,
     });
     clearCart();
   };
@@ -108,7 +132,7 @@ export const Cart = () => {
                       </p>
                     </div>
 
-                    <div className="flex flex-col items-end gap-2">
+                    <div className="flex justify-end">
                       <Button
                         variant="ghost"
                         size="icon"
@@ -117,30 +141,6 @@ export const Cart = () => {
                       >
                         <Trash2 className="w-4 h-4" />
                       </Button>
-                      
-                      <div className="flex items-center gap-2">
-                        <Button
-                          variant="outline"
-                          size="icon"
-                          onClick={() => handleQuantityChange(item.id, item.quantity - 1)}
-                          className="h-8 w-8"
-                        >
-                          <Minus className="w-3 h-3" />
-                        </Button>
-                        
-                        <span className="w-8 text-center font-medium">
-                          {item.quantity}
-                        </span>
-                        
-                        <Button
-                          variant="outline"
-                          size="icon"
-                          onClick={() => handleQuantityChange(item.id, item.quantity + 1)}
-                          className="h-8 w-8"
-                        >
-                          <Plus className="w-3 h-3" />
-                        </Button>
-                      </div>
                     </div>
                   </div>
                 </CardContent>
@@ -156,22 +156,65 @@ export const Cart = () => {
                   Resumo do Pedido
                 </h2>
                 
-                <div className="space-y-3 mb-6">
+                <div className="space-y-4 mb-6">
                   <div className="flex justify-between text-sm">
                     <span className="text-muted-foreground">Subtotal</span>
                     <span className="text-foreground">{formatPrice(state.total)}</span>
                   </div>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">Frete</span>
-                    <span className="text-primary">Grátis</span>
-                  </div>
+                  
+                  {state.discount > 0 && (
+                    <div className="flex justify-between text-sm">
+                      <div className="flex items-center gap-2">
+                        <span className="text-muted-foreground">Desconto ({state.discount}%)</span>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={handleRemoveCoupon}
+                          className="h-6 px-2 text-xs text-destructive hover:text-destructive"
+                        >
+                          Remover
+                        </Button>
+                      </div>
+                      <span className="text-primary">-{formatPrice(state.total * state.discount / 100)}</span>
+                    </div>
+                  )}
+                  
                   <div className="border-t border-border pt-3">
                     <div className="flex justify-between font-semibold">
                       <span className="text-foreground">Total</span>
-                      <span className="text-primary text-lg">{formatPrice(state.total)}</span>
+                      <span className="text-primary text-lg">{formatPrice(finalTotal)}</span>
                     </div>
                   </div>
                 </div>
+
+                {/* Cupom de Desconto */}
+                {!state.couponCode && (
+                  <div className="mb-6">
+                    <div className="flex items-center gap-2 mb-2">
+                      <Tag className="w-4 h-4 text-primary" />
+                      <span className="text-sm font-medium text-foreground">Cupom de Desconto</span>
+                    </div>
+                    <div className="flex gap-2">
+                      <Input  
+                        placeholder="Digite seu cupom"
+                        value={couponInput}
+                        onChange={(e) => setCouponInput(e.target.value)}
+                        className="flex-1"
+                        onKeyPress={(e) => e.key === 'Enter' && handleApplyCoupon()}
+                      />
+                      <Button 
+                        onClick={handleApplyCoupon}
+                        variant="outline"
+                        className="px-4"
+                      >
+                        Aplicar
+                      </Button>
+                    </div>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Teste: DESCONTO10, PROMO15, SAVE20
+                    </p>
+                  </div>
+                )}
 
                 <Button 
                   onClick={handleCheckout}

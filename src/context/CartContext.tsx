@@ -9,12 +9,16 @@ interface CartState {
   items: CartItem[];
   total: number;
   itemCount: number;
+  discount: number;
+  couponCode: string | null;
 }
 
 type CartAction =
   | { type: 'ADD_ITEM'; payload: Product }
   | { type: 'REMOVE_ITEM'; payload: string }
   | { type: 'UPDATE_QUANTITY'; payload: { id: string; quantity: number } }
+  | { type: 'APPLY_COUPON'; payload: { code: string; discount: number } }
+  | { type: 'REMOVE_COUPON' }
   | { type: 'CLEAR_CART' };
 
 const CartContext = createContext<{
@@ -23,6 +27,8 @@ const CartContext = createContext<{
   addItem: (product: Product) => boolean;
   removeItem: (productId: string) => void;
   updateQuantity: (productId: string, quantity: number) => void;
+  applyCoupon: (code: string) => boolean;
+  removeCoupon: () => void;
   clearCart: () => void;
   isInCart: (productId: string) => boolean;
 } | null>(null);
@@ -40,6 +46,8 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
         items: newItems,
         total: newItems.reduce((sum, item) => sum + item.price * item.quantity, 0),
         itemCount: newItems.reduce((sum, item) => sum + item.quantity, 0),
+        discount: state.discount,
+        couponCode: state.couponCode,
       };
     }
     case 'REMOVE_ITEM': {
@@ -48,6 +56,8 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
         items: newItems,
         total: newItems.reduce((sum, item) => sum + item.price * item.quantity, 0),
         itemCount: newItems.reduce((sum, item) => sum + item.quantity, 0),
+        discount: state.discount,
+        couponCode: state.couponCode,
       };
     }
     case 'UPDATE_QUANTITY': {
@@ -60,13 +70,29 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
         items: newItems,
         total: newItems.reduce((sum, item) => sum + item.price * item.quantity, 0),
         itemCount: newItems.reduce((sum, item) => sum + item.quantity, 0),
+        discount: state.discount,
+        couponCode: state.couponCode,
       };
     }
+    case 'APPLY_COUPON':
+      return {
+        ...state,
+        discount: action.payload.discount,
+        couponCode: action.payload.code,
+      };
+    case 'REMOVE_COUPON':
+      return {
+        ...state,
+        discount: 0,
+        couponCode: null,
+      };
     case 'CLEAR_CART':
       return {
         items: [],
         total: 0,
         itemCount: 0,
+        discount: 0,
+        couponCode: null,
       };
     default:
       return state;
@@ -77,6 +103,15 @@ const initialState: CartState = {
   items: [],
   total: 0,
   itemCount: 0,
+  discount: 0,
+  couponCode: null,
+};
+
+// Cupons válidos
+const validCoupons: Record<string, number> = {
+  'DESCONTO10': 10,
+  'PROMO15': 15,
+  'SAVE20': 20,
 };
 
 export const CartProvider = ({ children }: { children: ReactNode }) => {
@@ -103,6 +138,19 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     dispatch({ type: 'CLEAR_CART' });
   };
 
+  const applyCoupon = (code: string): boolean => {
+    const discount = validCoupons[code.toUpperCase()];
+    if (discount) {
+      dispatch({ type: 'APPLY_COUPON', payload: { code: code.toUpperCase(), discount } });
+      return true;
+    }
+    return false;
+  };
+
+  const removeCoupon = () => {
+    dispatch({ type: 'REMOVE_COUPON' });
+  };
+
   const isInCart = (productId: string): boolean => {
     return state.items.some(item => item.id === productId);
   };
@@ -114,6 +162,8 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       addItem,
       removeItem,
       updateQuantity,
+      applyCoupon,
+      removeCoupon,
       clearCart,
       isInCart,
     }}>
