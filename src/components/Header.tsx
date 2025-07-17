@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import { Search, ShoppingCart, Menu, X } from 'lucide-react';
+import { Search, ShoppingCart, Menu, X, Heart } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/context/CartContext';
+import { useFavorites } from '../context/FavoritesContext';
 
 interface HeaderProps {
   onSearchChange: (query: string) => void;
@@ -13,7 +14,8 @@ interface HeaderProps {
 
 export const Header = ({ onSearchChange, onMenuToggle, isMobileMenuOpen }: HeaderProps) => {
   const [searchQuery, setSearchQuery] = useState('');
-  const { state } = useCart();
+  const { state: cartState } = useCart();
+  const { state: favoritesState } = useFavorites();
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const query = e.target.value;
@@ -39,7 +41,7 @@ export const Header = ({ onSearchChange, onMenuToggle, isMobileMenuOpen }: Heade
           <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
             <span className="text-primary-foreground font-bold text-sm">S</span>
           </div>
-          <h1 className="text-xl font-bold text-foreground hidden sm:block">SpotShop</h1>
+          <h1 className="text-xl font-bold text-foreground hidden sm:block">Slides Parma</h1>
         </Link>
         
         {/* Search Bar */}
@@ -54,13 +56,25 @@ export const Header = ({ onSearchChange, onMenuToggle, isMobileMenuOpen }: Heade
           />
         </div>
 
+        {/* Favorites Button */}
+        <Link to="/favorites">
+          <Button variant="ghost" size="icon" className="relative">
+            <Heart className="w-5 h-5" />
+            {favoritesState.itemCount > 0 && (
+              <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center animate-pulse">
+                {favoritesState.itemCount}
+              </span>
+            )}
+          </Button>
+        </Link>
+
         {/* Cart Button */}
         <Link to="/cart">
           <Button variant="ghost" size="icon" className="relative">
             <ShoppingCart className="w-5 h-5" />
-            {state.itemCount > 0 && (
+            {cartState.itemCount > 0 && (
               <span className="absolute -top-1 -right-1 bg-primary text-primary-foreground text-xs rounded-full w-5 h-5 flex items-center justify-center animate-pulse">
-                {state.itemCount}
+                {cartState.itemCount}
               </span>
             )}
           </Button>

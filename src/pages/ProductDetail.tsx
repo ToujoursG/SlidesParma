@@ -12,14 +12,15 @@ import { ProductGrid } from '@/components/ProductGrid';
 import { mockProducts } from '@/data/mockData';
 import { mockReviews } from '@/data/reviews';
 import { useCart } from '@/context/CartContext';
+import { useFavorites } from '../context/FavoritesContext';
 import { useToast } from '@/hooks/use-toast';
 
 const ProductDetail = () => {
   const { id } = useParams();
   const [product, setProduct] = useState<Product | null>(null);
   const [selectedImage, setSelectedImage] = useState(0);
-  const [isFavorite, setIsFavorite] = useState(false);
   const { addItem, isInCart } = useCart();
+  const { addToFavorites, removeFromFavorites, isFavorite } = useFavorites();
   const { toast } = useToast();
 
   const recommendedProducts = mockProducts.filter(p => 
@@ -70,6 +71,26 @@ const ProductDetail = () => {
     }
   };
 
+  const handleToggleFavorite = () => {
+    const isCurrentlyFavorite = isFavorite(product.id);
+    
+    if (isCurrentlyFavorite) {
+      removeFromFavorites(product.id);
+      toast({
+        title: "Removido dos favoritos",
+        description: "O produto foi removido da sua lista de desejos",
+      });
+    } else {
+      const success = addToFavorites(product);
+      if (success) {
+        toast({
+          title: "Adicionado aos favoritos",
+          description: "O produto foi adicionado à sua lista de desejos",
+        });
+      }
+    }
+  };
+
   const renderStars = (rating: number) => {
     return Array.from({ length: 5 }, (_, i) => (
       <Star
@@ -85,6 +106,7 @@ const ProductDetail = () => {
 
   const images = product.images || [product.image];
   const inCart = isInCart(product.id);
+  const isProductFavorite = isFavorite(product.id);
 
   return (
     <div className="min-h-screen bg-background">
@@ -200,9 +222,9 @@ const ProductDetail = () => {
                   variant="outline"
                   size="icon"
                   className="h-12 w-12"
-                  onClick={() => setIsFavorite(!isFavorite)}
+                  onClick={handleToggleFavorite}
                 >
-                  <Heart className={`w-5 h-5 ${isFavorite ? 'fill-red-500 text-red-500' : ''}`} />
+                  <Heart className={`w-5 h-5 ${isProductFavorite ? 'fill-red-500 text-red-500' : ''}`} />
                 </Button>
                 
                 <Button
@@ -216,7 +238,7 @@ const ProductDetail = () => {
 
               <div className="flex items-center space-x-2 text-sm text-muted-foreground">
                 <Truck className="w-4 h-4" />
-                <span>Frete grátis para todo o Brasil</span>
+                <span>Entrega via WhatsApp</span>
               </div>
             </div>
           </div>
@@ -288,12 +310,12 @@ const ProductDetail = () => {
                 <div className="space-y-3">
                   <div className="flex items-center space-x-2">
                     <Truck className="w-5 h-5 text-primary" />
-                    <span>Frete grátis para todo o Brasil</span>
+                    <span>Entrega via WhatsApp</span>
                   </div>
                   <p className="text-muted-foreground">
-                    • Entrega em até 7 dias úteis<br/>
-                    • Rastreamento disponível<br/>
-                    • Embalagem segura e sustentável
+                    • Resposta assim que possivel<br/>
+                    • Pratico e rapido<br/>
+                    • 100% confiavel!
                   </p>
                 </div>
               </CardContent>

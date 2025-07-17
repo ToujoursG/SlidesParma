@@ -15,7 +15,7 @@ const Index = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [filters, setFilters] = useState<FilterOptions>({
-    priceRange: [0, 2000],
+    priceRange: [0, 30],
     categories: [],
     rating: 0,
     sortBy: 'name'

@@ -1,8 +1,14 @@
+import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Banner as BannerType } from '@/data/mockData';
 
 interface BannerProps {
-  banner: BannerType;
+  banner: {
+    image: string;
+    title: string;
+    subtitle: string;
+    buttonText: string;
+    link: string;
+  };
 }
 
 export const Banner = ({ banner }: BannerProps) => {
@@ -21,12 +27,14 @@ export const Banner = ({ banner }: BannerProps) => {
           <p className="text-lg md:text-xl opacity-90 max-w-md mx-auto">
             {banner.subtitle}
           </p>
-          <Button 
-            size="lg"
-            className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-8 py-3 transform hover:scale-105 transition-all duration-200"
-          >
-            {banner.buttonText}
-          </Button>
+          <Link to={banner.link}>
+            <Button 
+              size="lg"
+              className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-8 py-3 transform hover:scale-105 transition-all duration-200"
+            >
+              {banner.buttonText}
+            </Button>
+          </Link>
         </div>
       </div>
     </div>
