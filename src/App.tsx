@@ -23,7 +23,8 @@ const App = () => (
         <TooltipProvider>
           <Toaster />
           <Sonner />
-          <BrowserRouter>
+          {/* TROCA BrowserRouter por HashRouter */}
+          <HashRouter>
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/cart" element={<Cart />} />
@@ -32,10 +33,10 @@ const App = () => (
               <Route path="/favorites" element={<Favorites />} />
               <Route path="/admin" element={<Admin />} />
               <Route path="/novos" element={<Novos />} />
-              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+              {/* Catch-all route */}
               <Route path="*" element={<NotFound />} />
             </Routes>
-          </BrowserRouter>
+          </HashRouter>
         </TooltipProvider>
       </FavoritesProvider>
     </CartProvider>
