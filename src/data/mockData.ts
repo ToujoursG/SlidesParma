@@ -23,7 +23,7 @@ export const mockBanners: Banner[] = [
     id: '1',
     title: 'Lançamentos',
     subtitle: 'Confira os novos produtos',
-    image: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800&h=300&fit=crop',
+    image: 'https://img.freepik.com/fotos-gratis/natureza-morta-de-livros-versus-tecnologia_23-2150062920.jpg',
     buttonText: 'Ver Novidades',
     link: '/novos'
   }

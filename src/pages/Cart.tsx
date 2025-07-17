@@ -199,16 +199,19 @@ export const Cart = () => {
 
   // Mensagem WhatsApp
   const message =
-    `*🛍️ Novo Pedido - Loja SlidesParma*\n\n` +
-    `📄 *ID:* ${orderId}\n` +
-    `📆 *Data:* ${date}\n\n` +
+    `*Novo Pedido* -SlidesParma\n\n` +
+    '⏤⏤⏤⏤⏤⏤⏤⏤⏤⏤⏤⏤⏤⏤⏤⏤ \n \n' +
+    `*ID:* ${orderId}\n` +
+    `*Data:* ${date}\n\n` +
+    '⏤⏤⏤⏤⏤⏤⏤⏤⏤⏤⏤⏤⏤⏤⏤⏤ \n \n' +
     `*Produtos comprados:*\n${itemsText}\n` +
     (state.discount > 0
-      ? `🔖 *Desconto aplicado:* ${state.discount}%\n`
+      ? `*Desconto aplicado:* ${state.discount}%\n`
       : '') +
-    `💰 *Total com desconto:* ${formatPrice(finalTotal)}\n\n` +
-    `📎 *Anexe o PDF baixado (${fileName}) e envie esta mensagem para a equipe da Loja Parma.*\n` +
-    `Obrigado por comprar conosco! 🧡`;
+    `*Total com desconto:* ${formatPrice(finalTotal)}\n\n` +
+    '⏤⏤⏤⏤⏤⏤⏤⏤⏤⏤⏤⏤⏤⏤⏤⏤ \n \n' +
+    `Anexe o PDF baixado *(${fileName})* e envie-nos esta mensagem.\n` +
+    `Obrigado por comprar conosco!`;
 
   const encodedMessage = encodeURIComponent(message);
   const whatsappUrl = `https://wa.me/5518991555926?text=${encodedMessage}`;
