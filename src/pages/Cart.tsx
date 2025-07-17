@@ -214,7 +214,9 @@ export const Cart = () => {
 
     const encodedMessage = encodeURIComponent(message);
     const whatsappUrl = `https://wa.me/5518991555926?text=${encodedMessage}`;
-    window.open(whatsappUrl, '_blank');
+    setTimeout(() => {
+      window.open(whatsappUrl, '_blank');
+    }, 1000);
 
     toast({
       title: "Pedido gerado com proteção!",
