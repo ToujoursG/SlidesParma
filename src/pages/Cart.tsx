@@ -199,22 +199,22 @@ export const Cart = () => {
 
   // Mensagem WhatsApp
   const message =
-    `*Novo Pedido - SlidesParma*\n\n` +
+    `*Novo Pedido - SlidesParma*\n` +
     '________________________ \n \n' +
     `*ID do Pedido:* ${orderId}\n` +
-    `*Data:* ${date}\n\n` +
-    ' \n________________________ \n' +
+    `*Data:* ${date}\n` +
+    ' \n________________________ \n \n' +
     `*Itens adquiridos:*\n${itemsText}\n` +
     (state.discount > 0
       ? `*Desconto aplicado:* ${state.discount}%\n`
       : '') +
-    `*Total com desconto:* ${formatPrice(finalTotal)}\n\n` +
+    `*Total com desconto:* ${formatPrice(finalTotal)}\n` +
     '________________________ \n \n' +
-    'Para concluir seu pedido, por favor:' +
+    'Para concluir seu pedido, por favor: \n \n' +
     `1. Anexe o arquivo *(${fileName})*\n \n` +
     `2. envie esta mensagem diretamente para nós. \n \n`; +
-    'Agradecemos sua confiança e preferência!'
-    'Grupo Parma'
+    'Agradecemos sua confiança e preferência!' +
+    'Grupo Parma' +
 
 
 
