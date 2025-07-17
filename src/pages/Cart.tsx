@@ -212,9 +212,9 @@ export const Cart = () => {
     '________________________ \n \n' +
     'Para concluir seu pedido, por favor: \n \n' +
     `1. Anexe o arquivo *(${fileName})*\n \n` +
-    `2. envie esta mensagem diretamente para nós. \n \n`; +
+    `2. envie esta mensagem diretamente para nós. \n \n` +
     'Agradecemos sua confiança e preferência!' +
-    'Grupo Parma' +
+    'Grupo Parma';
 
 
 
