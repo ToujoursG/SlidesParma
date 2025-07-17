@@ -89,9 +89,8 @@ export const mockProducts: Product[] = [
     category: 'criativos',
     description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam ac arcu orci. Cras eget molestie tortor, sed ultricies sapien.',
     images: [
-      'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&h=500&fit=crop',
-      'https://images.unsplash.com/photo-1484704849700-f032a568e944?w=500&h=500&fit=crop',
-      'https://images.unsplash.com/photo-1546435770-a3e426bf472b?w=500&h=500&fit=crop'
+      'https://tse4.mm.bing.net/th/id/OIP.2W0xzGI30PJgfP57fXQ6igHaEK?rs=1&pid=ImgDetMain&o=7&rm=3',
+      'https://tse4.mm.bing.net/th/id/OIP.2W0xzGI30PJgfP57fXQ6igHaEK?rs=1&pid=ImgDetMain&o=7&rm=3'
     ],
     rating: 4.7,
     reviewCount: 203,
