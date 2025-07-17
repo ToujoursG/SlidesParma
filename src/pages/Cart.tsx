@@ -51,153 +51,178 @@ export const Cart = () => {
   };
 
   const handleCheckout = () => {
-  const doc = new jsPDF({
-    unit: 'pt',
-    format: 'a4',
-    putOnlyUsedFonts: true,
-  });
+    const doc = new jsPDF({
+      unit: 'pt',
+      format: 'a4',
+      putOnlyUsedFonts: true,
+    });
 
-  const pageWidth = doc.internal.pageSize.getWidth();
-  const pageHeight = doc.internal.pageSize.getHeight();
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const pageHeight = doc.internal.pageSize.getHeight();
 
-  // Fundo escuro (preto bem escuro)
-  doc.setFillColor(20, 20, 20);
-  doc.rect(0, 0, pageWidth, pageHeight, 'F');
+    // Fundo escuro (preto bem escuro)
+    doc.setFillColor(20, 20, 20);
+    doc.rect(0, 0, pageWidth, pageHeight, 'F');
 
-  const margin = 40;
-  let y = margin;
+    const margin = 40;
+    let y = margin;
 
-  const orderId = `PED-${Date.now()}`;
-  const date = new Date().toLocaleString('pt-BR');
+    const orderId = `PED-${Date.now()}`;
+    const date = new Date().toLocaleString('pt-BR');
 
-  const orderData = {
-    id: orderId,
-    date,
-    items: state.items,
-    total: finalTotal
-  };
+    const orderData = {
+      id: orderId,
+      date,
+      items: state.items,
+      total: finalTotal
+    };
 
-  const orderHash = CryptoJS.SHA256(JSON.stringify(orderData)).toString();
+    const orderHash = CryptoJS.SHA256(JSON.stringify(orderData)).toString();
 
-  // Marca d’água quase invisível, cinza claro transparente
-  doc.setFontSize(80);
-  doc.setTextColor(255, 255, 255, 0.05); // branco com alfa 5%
-  const wmText = 'PARMA OFICIAL';
-  for (let i = -100; i < pageHeight + 100; i += 120) {
-    doc.text(wmText, pageWidth / 2, i, { angle: 45, align: 'center' });
-  }
-
-  // Cor Parma para títulos: rgb(43%,72%,53%) → #6ED284 (hex) → rgb(110, 210, 132)
-  const parmaRGB = [220, 167, 52];
-
-  // Cabeçalho
-  doc.setFontSize(22);
-  doc.setFont('helvetica', 'bold');
-  doc.setTextColor(...parmaRGB);
-  doc.text('Loja Parma - Pedido Oficial', pageWidth / 2, y, { align: 'center' });
-  y += 30;
-
-  // Linha de separação suave (verde claro transparente)
-  doc.setDrawColor(110, 210, 132, 60);
-  doc.setLineWidth(1);
-  doc.line(margin, y, pageWidth - margin, y);
-  y += 20;
-
-  // Informações principais
-  doc.setFontSize(12);
-  doc.setFont('helvetica', 'normal');
-  doc.setTextColor(230); // branco quase total
-  doc.text(`ID do Pedido: ${orderId}`, margin, y);
-  y += 18;
-  doc.text(`Data/Hora: ${date}`, margin, y);
-  y += 25;
-
-  // Hash de segurança
-  doc.setFontSize(9);
-  doc.setTextColor(150); // cinza claro
-  doc.text(`Hash de Verificação:`, margin, y);
-  y += 14;
-  doc.setFontSize(8);
-  doc.setTextColor(130);
-  doc.text(orderHash.substring(0, 64), margin, y);
-  y += 12;
-  doc.text(orderHash.substring(64), margin, y);
-  y += 25;
-
-  // Itens do pedido - título
-  doc.setFontSize(14);
-  doc.setFont('helvetica', 'bold');
-  doc.setTextColor(...parmaRGB);
-  doc.text('Itens do Pedido:', margin, y);
-  y += 20;
-
-  doc.setFontSize(11);
-  doc.setFont('helvetica', 'normal');
-  doc.setTextColor(230);
-
-  // Listagem dos itens com nome à esquerda e preço alinhado à direita
-  state.items.forEach((item) => {
-    if (y > pageHeight - margin - 50) {
-      doc.addPage();
-      y = margin;
+    // Marca d’água quase invisível, cinza claro transparente
+    doc.setFontSize(80);
+    doc.setTextColor(255, 255, 255, 0.05); // branco com alfa 5%
+    const wmText = 'PARMA OFICIAL';
+    for (let i = -100; i < pageHeight + 100; i += 120) {
+      doc.text(wmText, pageWidth / 2, i, { angle: 45, align: 'center' });
     }
-    doc.text(`• ${item.name}`, margin, y);
-    doc.text(formatPrice(item.price), pageWidth - margin, y, { align: 'right' });
-    y += 18;
-  });
 
-  y += 15;
+    // Cor Parma para títulos: rgb(43%,72%,53%) → #6ED284 (hex) → rgb(110, 210, 132)
+    const parmaRGB = [220, 167, 52];
 
-  // Desconto
-  if (state.discount > 0) {
-    doc.setTextColor(230, 100, 100);
+    // Cabeçalho
+    doc.setFontSize(22);
     doc.setFont('helvetica', 'bold');
-    doc.text(`Desconto aplicado: ${state.discount}%`, margin, y);
+    doc.setTextColor(...parmaRGB);
+    doc.text('Loja Parma - Pedido Oficial', pageWidth / 2, y, { align: 'center' });
+    y += 30;
+
+    // Linha de separação suave (verde claro transparente)
+    doc.setDrawColor(110, 210, 132, 60);
+    doc.setLineWidth(1);
+    doc.line(margin, y, pageWidth - margin, y);
+    y += 20;
+
+    // Informações principais
+    doc.setFontSize(12);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(230); // branco quase total
+    doc.text(`ID do Pedido: ${orderId}`, margin, y);
+    y += 18;
+    doc.text(`Data/Hora: ${date}`, margin, y);
     y += 25;
-  }
 
-  // Total
-  doc.setFontSize(16);
-  doc.setFont('helvetica', 'bold');
-  doc.setTextColor(...parmaRGB);
-  doc.text(`Total com desconto: ${formatPrice(finalTotal)}`, margin, y);
-  y += 40;
+    // Hash de segurança
+    doc.setFontSize(9);
+    doc.setTextColor(150); // cinza claro
+    doc.text(`Hash de Verificação:`, margin, y);
+    y += 14;
+    doc.setFontSize(8);
+    doc.setTextColor(130);
+    doc.text(orderHash.substring(0, 64), margin, y);
+    y += 12;
+    doc.text(orderHash.substring(64), margin, y);
+    y += 25;
 
-  // Linha final de separação
-  doc.setDrawColor(80);
-  doc.setLineWidth(0.7);
-  doc.line(margin, y, pageWidth - margin, y);
-  y += 30;
+    // Itens do pedido - título
+    doc.setFontSize(14);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(...parmaRGB);
+    doc.text('Itens do Pedido:', margin, y);
+    y += 20;
 
-  // Rodapé com mensagem clara
-  doc.setFontSize(10);
-  doc.setFont('helvetica', 'italic');
-  doc.setTextColor(180);
-  doc.text('Este PDF contém marcas d’água.', margin, y);
-  y += 14;
-  doc.text('Alterações manuais invalidam sua autenticidade.', margin, y);
-  y += 14;
+    doc.setFontSize(11);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(230);
 
-  // Exporta o PDF
-  const fileName = `${orderId}.pdf`;
-  doc.save(fileName);
+    // Listagem dos itens com nome à esquerda e preço alinhado à direita
+    state.items.forEach((item) => {
+      if (y > pageHeight - margin - 50) {
+        doc.addPage();
+        y = margin;
+      }
+      doc.text(`• ${item.name}`, margin, y);
+      doc.text(formatPrice(item.price), pageWidth - margin, y, { align: 'right' });
+      y += 18;
+    });
 
-  // Mensagem WhatsApp
-  const message = `🛒 *Novo Pedido*\n\n` +
-    `📄 ID: ${orderId}\n📆 Data: ${date}\n💰 Total: ${formatPrice(finalTotal)}\n\n` +
-    `📎 Anexe o PDF baixado e envie esta mensagem para confirmar seu pedido.`;
+    y += 15;
 
-  const encodedMessage = encodeURIComponent(message);
-  const whatsappUrl = `https://wa.me/5518991555926?text=${encodedMessage}`;
-  window.open(whatsappUrl, '_blank');
+    // Desconto
+    if (state.discount > 0) {
+      doc.setTextColor(230, 100, 100);
+      doc.setFont('helvetica', 'bold');
+      doc.text(`Desconto aplicado: ${state.discount}%`, margin, y);
+      y += 25;
+    }
 
-  toast({
-    title: "Pedido gerado com proteção!",
-    description: "PDF baixado e WhatsApp aberto. Envie com o arquivo.",
-  });
+    // Total
+    doc.setFontSize(16);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(...parmaRGB);
+    doc.text(`Total com desconto: ${formatPrice(finalTotal)}`, margin, y);
+    y += 40;
 
-  clearCart();
-};
+    // Linha final de separação
+    doc.setDrawColor(80);
+    doc.setLineWidth(0.7);
+    doc.line(margin, y, pageWidth - margin, y);
+    y += 30;
+
+    // Rodapé com mensagem clara
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'italic');
+    doc.setTextColor(180);
+    doc.text('Este PDF contém marcas d’água.', margin, y);
+    y += 14;
+    doc.text('Alterações manuais invalidam sua autenticidade.', margin, y);
+    y += 14;
+
+    // Exporta o PDF
+    const fileName = `${orderId}.pdf`;
+    const pdfBlob = doc.output('blob');
+    const blobUrl = URL.createObjectURL(pdfBlob);
+
+    // Tenta abrir em nova aba (funciona melhor em celular)
+    const downloadWindow = window.open(blobUrl, '_blank');
+
+    if (!downloadWindow) {
+      // Fallback: força download
+      const a = document.createElement('a');
+      a.href = blobUrl;
+      a.download = fileName;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(blobUrl);
+    }
+
+    // Mensagem WhatsApp
+    const message =
+      `*🛍️ Novo Pedido - Loja SlidesParma*\n\n` +
+      `*📄 ID:* ${orderId}\n` +
+      `*📆 Data:* ${date}\n\n` +
+      `*Produtos comprados:*\n${itemsText}\n` +
+      (state.discount > 0
+        ? `*🔖 Desconto aplicado:* ${state.discount}%\n`
+        : '') +
+      `*💰 Total com desconto:* ${formatPrice(finalTotal)}\n\n` +
+      `──────────────\n` +
+      `📎 *Anexe o PDF baixado e envie esta mensagem para confirmar seu pedido.*\n` +
+      `Obrigado por comprar com o *Grupo Parma*! `;
+
+
+    const encodedMessage = encodeURIComponent(message);
+    const whatsappUrl = `https://wa.me/5518991555926?text=${encodedMessage}`;
+    window.open(whatsappUrl, '_blank');
+
+    toast({
+      title: "Pedido gerado com proteção!",
+      description: "PDF baixado e WhatsApp aberto. Envie com o arquivo.",
+    });
+
+    clearCart();
+  };
 
 
   if (state.items.length === 0) {
