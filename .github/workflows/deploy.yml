@@ -3,7 +3,7 @@ name: Deploy Vite to GitHub Pages
 on:
   push:
     branches:
-      - main  # ou "master" se for o seu caso
+      - main
 
 jobs:
   deploy:
@@ -13,7 +13,7 @@ jobs:
       - name: Checkout do código
         uses: actions/checkout@v3
 
-      - name: Instalar Node
+      - name: Instalar Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 20
@@ -24,8 +24,10 @@ jobs:
       - name: Build do projeto
         run: npm run build
 
-      - name: Deploy no GitHub Pages
+      - name: Publicar no GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist
+          user_name: ToujoursG
+          user_email: gustavolinkded@gmail.com
