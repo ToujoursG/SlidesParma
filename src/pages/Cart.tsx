@@ -216,7 +216,7 @@ export const Cart = () => {
     const whatsappUrl = `https://wa.me/5518991555926?text=${encodedMessage}`;
     setTimeout(() => {
       window.open(whatsappUrl, '_blank');
-    }, 1000);
+    }, 5000);
 
     toast({
       title: "Pedido gerado com proteção!",
@@ -372,6 +372,7 @@ export const Cart = () => {
                       </Button>
                     </div>
                     <p className="text-xs text-muted-foreground mt-1">
+                      Envie o PDF gbaixado para nos no WhatsApp para ajudar a previnir furtos.
                       Teste: DESCONTO10, PROMO15, SAVE20
                     </p>
                   </div>
