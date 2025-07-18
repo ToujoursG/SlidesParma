@@ -178,7 +178,7 @@ const handleCheckout = () => {
 
       const itemText = `• ${item.name} - ${formatPrice(item.price)}`;
       doc.text(itemText, margin, y);
-      itemsText += `${item.name} - ${formatPrice(item.price)}\n`;
+      itemsText += `- ${item.name} - ${formatPrice(item.price)}\n`;
       y += 20;
     });
 
@@ -336,15 +336,16 @@ const handleCheckout = () => {
 
     // Mensagem WhatsApp
     const message =
+      '________________________ \n \n' +
       `🛒 *Novo Pedido - SlidesParma*\n` +
       '________________________ \n \n' +
       `📦 *ID do Pedido:* ${orderId}\n` +
       `📅 *Data:* ${date}\n` +
       ' \n________________________ \n \n' +
-      `💰 *Itens adquiridos:*\n${itemsText}\n` +
-      `*Total:* ${formatPrice(finalTotal)}\n` +
+      `💰 *Itens adquiridos:*\n ${itemsText}\n` +
+      `🧾*Total:* ${formatPrice(finalTotal)}\n` +
       '________________________ \n \n' +
-      'Para concluir seu pedido, por favor: \n \n' +
+      '✅Para continuar com seu pedido, por favor: \n \n' +
       `1. Anexe o arquivo *(${fileName})*\n \n` +
       `2. envie esta mensagem diretamente para nós. \n \n` +
       '🐙Agradecemos sua confiança e preferência!\n' +
