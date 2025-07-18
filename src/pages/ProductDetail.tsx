@@ -47,6 +47,38 @@ const ProductDetail = () => {
     );
   }
 
+  const handleShare = async () => {
+    const url = window.location.href;
+
+    // Detectar se é dispositivo móvel
+    const isMobile = /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|Mobile/i.test(
+      navigator.userAgent
+    );
+
+    if (isMobile && navigator.share) {
+      // Compartilhamento nativo em celular
+      try {
+        await navigator.share({
+          title: document.title,
+          url,
+        });
+      } catch (error) {
+        console.error("Erro ao compartilhar:", error);
+      }
+    } else {
+      // Copiar link no desktop
+      try {
+        await navigator.clipboard.writeText(url);
+        toast({
+          title: "Link copiado para a área de transferência!",
+          description: "O produto foi copiado à sua área de transferência",
+        });
+      } catch (err) {
+        console.error("Erro ao copiar o link:", err);
+      }
+    }
+  };
+
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('pt-BR', {
       style: 'currency',
@@ -228,6 +260,7 @@ const ProductDetail = () => {
                 </Button>
                 
                 <Button
+                  onClick={handleShare}
                   variant="outline"
                   size="icon"
                   className="h-12 w-12"
@@ -313,9 +346,9 @@ const ProductDetail = () => {
                     <span>Entrega via WhatsApp</span>
                   </div>
                   <p className="text-muted-foreground">
-                    • Resposta assim que possivel<br/>
-                    • Pratico e rapido<br/>
-                    • 100% confiavel!
+                    • Resposta o mais rápido possível<br/>
+                    • Prático e eficiente<br/>
+                    • 100% confiável!
                   </p>
                 </div>
               </CardContent>

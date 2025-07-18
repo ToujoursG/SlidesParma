@@ -8,9 +8,7 @@ import { FavoritesProvider } from "@/context/FavoritesContext";
 import Index from "./pages/Index";
 import { Cart } from "./pages/Cart";
 import ProductDetail from "./pages/ProductDetail";
-import Login from "./pages/Login";
 import Favorites from "./pages/Favorites";
-import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
 import Novos from "./pages/Novos";
 
@@ -29,9 +27,7 @@ const App = () => (
               <Route path="/" element={<Index />} />
               <Route path="/cart" element={<Cart />} />
               <Route path="/product/:id" element={<ProductDetail />} />
-              <Route path="/login" element={<Login />} />
               <Route path="/favorites" element={<Favorites />} />
-              <Route path="/admin" element={<Admin />} />
               <Route path="/novos" element={<Novos />} />
               {/* Catch-all route */}
               <Route path="*" element={<NotFound />} />

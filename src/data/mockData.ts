@@ -30,9 +30,9 @@ export const mockBanners: Banner[] = [
 ];
 
 export const mockCategories: Category[] = [
-  { id: 'divertidos', name: 'Divertidos', count: 3 },
-  { id: 'serios', name: 'Sérios', count: 3 },
-  { id: 'criativos', name: 'Criativos', count: 3 },
+  { id: 'divertidos', name: 'Divertidos', count: 1 },
+  { id: 'serios', name: 'Sérios', count: 1 },
+  { id: 'criativos', name: 'Criativos', count: 1 },
 ];
 
 export const mockProducts: Product[] = [
@@ -48,8 +48,8 @@ export const mockProducts: Product[] = [
       'https://tse1.mm.bing.net/th/id/OIP.NVmlzq56yFODtkbp29Ei3QHaEK?rs=1&pid=ImgDetMain&o=7&rm=3',
       'https://tse4.mm.bing.net/th/id/OIF.TCLJrnWKBBqBOwVPzsbFUQ?rs=1&pid=ImgDetMain&o=7&rm=3'
     ],
-    rating: 4.5,
-    reviewCount: 127,
+    rating: 5.0,
+    reviewCount: 1,
     specifications: {
       'Variações': 'Canva, Powerpoint',
       'Tamanho': '15 paginas',
@@ -70,8 +70,8 @@ export const mockProducts: Product[] = [
       'https://tse1.mm.bing.net/th/id/OIP.rTKDZ5bR92RCej2W-dNr1gHaEI?rs=1&pid=ImgDetMain&o=7&rm=3',
       'https://tse1.mm.bing.net/th/id/OIP.rTKDZ5bR92RCej2W-dNr1gHaEI?rs=1&pid=ImgDetMain&o=7&rm=3'
     ],
-    rating: 4.4,
-    reviewCount: 178,
+    rating: 1.2,
+    reviewCount: 1,
     specifications: {
       'Variações': 'Canva, Powerpoint',
       'Tamanho': '15 paginas',
@@ -92,8 +92,8 @@ export const mockProducts: Product[] = [
       'https://tse4.mm.bing.net/th/id/OIP.2W0xzGI30PJgfP57fXQ6igHaEK?rs=1&pid=ImgDetMain&o=7&rm=3',
       'https://tse4.mm.bing.net/th/id/OIP.2W0xzGI30PJgfP57fXQ6igHaEK?rs=1&pid=ImgDetMain&o=7&rm=3'
     ],
-    rating: 4.7,
-    reviewCount: 203,
+    rating: 3.4,
+    reviewCount: 1,
     specifications: {
       'Variações': 'Canva, Powerpoint',
       'Tamanho': '15 paginas',

@@ -507,8 +507,7 @@ const handleCheckout = () => {
                       </Button>
                     </div>
                     <p className="text-xs text-muted-foreground mt-1">
-                      Envie o PDF gbaixado para nos no WhatsApp para ajudar a previnir furtos.
-                      Teste: DESCONTO10, PROMO15, SAVE20
+                      Envie o PDF baixado para nós no WhatsApp para ajudar a prevenir fraudes.
                     </p>
                   </div>
                 )}
