@@ -50,7 +50,7 @@ export const Cart = () => {
     });
   };
 
-  const handleCheckout = () => {
+const handleCheckout = () => {
     const doc = new jsPDF({
       unit: 'pt',
       format: 'a4',
@@ -163,14 +163,14 @@ export const Cart = () => {
         doc.addPage();
         addWatermark();
         y = margin + 40;
-
+        
         // Cabeçalho da nova página
         doc.setFontSize(16);
         doc.setFont('helvetica', 'bold');
         doc.setTextColor(0, 0, 0);
         doc.text('Slides comprados (continuação):', margin, y);
         y += 30;
-
+        
         doc.setFontSize(12);
         doc.setFont('helvetica', 'normal');
         doc.setTextColor(0, 0, 0);
@@ -199,7 +199,7 @@ export const Cart = () => {
     doc.setTextColor(...dourado);
     const valorTotalText = 'Valor Total: ';
     doc.text(valorTotalText, margin, y);
-
+    
     // Calcular posição do valor
     const valorTotalWidth = doc.getTextWidth(valorTotalText);
     doc.setTextColor(0, 0, 0); // Preto
@@ -216,17 +216,17 @@ export const Cart = () => {
     doc.setFontSize(12);
     doc.setFont('helvetica', 'normal');
     doc.setTextColor(0, 0, 0);
-
+    
     const precoSemDesconto = finalTotal / (1 - (state.discount || 0) / 100);
     doc.text(`Preço bruto: ${formatPrice(precoSemDesconto)}`, margin, y);
     y += 18;
-
+    
     if (state.discount > 0) {
       doc.text(`Desconto: ${state.discount}%`, margin, y);
       y += 18;
     }
-
-    doc.text(`Valor descontado: ${formatPrice(precoSemDesconto - finalTotal)}`, margin, y);
+    
+    doc.text(`Valor descontado: ${formatPrice(finalTotal)}`, margin, y);
     y += 40;
 
     // ========== SEÇÃO 3: IMPORTANTE E SEGURANÇA ==========
@@ -282,7 +282,7 @@ export const Cart = () => {
     doc.setTextColor(0, 0, 0);
     doc.text('Hax de verificação:', margin, y);
     y += 15;
-
+    
     doc.setFontSize(8);
     doc.setFont('courier', 'normal');
     doc.setTextColor(...cinzaTexto);
@@ -306,7 +306,7 @@ export const Cart = () => {
     doc.setFont('helvetica', 'bold');
     doc.setTextColor(0, 0, 0);
     doc.text('Website', pageWidth - margin - 80, websiteY);
-
+    
     doc.setFontSize(10);
     doc.setFont('helvetica', 'normal');
     doc.text('https://toujours.github.io/SlidesParma', pageWidth - margin - 200, websiteY + 15);
@@ -336,26 +336,22 @@ export const Cart = () => {
 
     // Mensagem WhatsApp
     const message =
-      `*%F0%9F%93%A6%20Novo%20Pedido%20-%20SlidesParma*` +
-      '%0A________________________%0A%0A' +
-      `*ID do Pedido:* ${orderId}%0A` +
-      `*%F0%9F%93%85%20Data:* ${date}%0A` +
-      '%0A________________________%0A%0A' +
-      `*%F0%9F%A7%BE%20Itens%20adquiridos:*%0A${itemsText}%0A` +
-      (state.discount > 0
-        ? `*%F0%9F%92%B0%20Desconto%20aplicado:* ${state.discount}%25%0A`
-        : '') +
-      `*%F0%9F%92%B0%20Total:* ${encodeURIComponent(formatPrice(finalTotal))}%0A` +
-      '%0A________________________%0A%0A' +
-      'Para%20concluir%20seu%20pedido,%20por%20favor:%0A%0A' +
-      `1.%20%F0%9F%93%8E%20Anexe%20o%20arquivo%20*(${fileName})*%0A%0A` +
-      `2.%20%F0%9F%99%8F%20envie%20esta%20mensagem%20diretamente%20para%20n%C3%B3s.%0A%0A` +
-      'Agradecemos%20sua%20confian%C3%A7a%20e%20prefer%C3%AAncia!%0A' +
-      'Grupo%20Parma'
-
+      `🛒 *Novo Pedido - SlidesParma*\n` +
+      '________________________ \n \n' +
+      `📦 *ID do Pedido:* ${orderId}\n` +
+      `📅 *Data:* ${date}\n` +
+      ' \n________________________ \n \n' +
+      `💰 *Itens adquiridos:*\n${itemsText}\n` +
+      `*Total:* ${formatPrice(finalTotal)}\n` +
+      '________________________ \n \n' +
+      'Para concluir seu pedido, por favor: \n \n' +
+      `1. Anexe o arquivo *(${fileName})*\n \n` +
+      `2. envie esta mensagem diretamente para nós. \n \n` +
+      '🐙Agradecemos sua confiança e preferência!\n' +
+      '*Grupo Parma*';
 
     const encodedMessage = encodeURIComponent(message);
-    const whatsappUrl = `https://wa.me/5518991555926?text=${encodedMessage}`;
+    const whatsappUrl = `https://api.whatsapp.com/send?phone=5518991555926&text=${encodedMessage}`;
 
     // Abrir WhatsApp
     setTimeout(() => {
